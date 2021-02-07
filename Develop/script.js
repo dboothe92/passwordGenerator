@@ -1,10 +1,10 @@
-let upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-let lowerCaseLetters = 'abcdefghijklmnopqrstuvwxyz';
-let specialCharacter = '!"#$%&()*+,-./:;<=>?@[^_`{|}~';
-let numbers = '1234567890';
+let upperCaseLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+let lowerCaseLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+let specialCharacter = ['!', '#', '$', '%', '&', '(', ')', '*', '+', '-', '/', ':', ';', '<', '=', '>', '?', '@', '[', '^', '_', '{', '|', '}', '~'];
+let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 // Customer input - length of password
-let passwordGenerate = function() {
+let generatePassword = function() {
   //password length
   let passwordLength = parseInt(prompt("How many characters would you lke your password to be?"));
 
@@ -18,59 +18,39 @@ let passwordGenerate = function() {
   } else {
     //response for invalid input
     alert("Please select a numeric value between 8 and 126");
-    return passwordGenerate();
+    return generatePassword();
   };
 
   //If user selects no for all options
   if (!numberConfirm && !specialConfirm && !upperConfirm && !lowerConfirm) {
     alert("Please confirm at least one criteria");
-    return passwordGenerate();
-  //all 4 critera are confirmed
-  } else if (numberConfirm && specialConfirm && upperConfirm && lowerConfirm) {
-    options = upperCaseLetters.concat(lowerCaseLetters, specialCharacter, numbers);
+    return generatePassword();
+  };
 
-    //3 criteria are confirmed
-  } else if (!numberConfirm && specialConfirm && upperConfirm && lowerConfirm) {
-    options = upperCaseLetters.concat(lowerCaseLetters, specialCharacter);
-  } else if (numberConfirm && !specialConfirm && upperConfirm && lowerConfirm) {
-    options = upperCaseLetters.concat(lowerCaseLetters, numbers);
-  } else if (numberConfirm && specialConfirm && !upperConfirm && lowerConfirm) {
-    options = lowerCaseLetters.concat(specialCharacter, numbers);
-  } else if (numberConfirm && specialConfirm && upperConfirm && !lowerConfirm) {
-    options = upperCaseLetters.concat(specialCharacter, numbers);
+  //new array to hold concatonated arrays for confirmed criteria.
+  let combinedArrays = [];
 
-    //2 criteria are confirmed
-  } else if (!numberConfirm && !specialConfirm && upperConfirm && lowerConfirm) {
-    options = upperCaseLetters.concat(lowerCaseLetters);
-  } else if (!numberConfirm && specialConfirm && !upperConfirm && lowerConfirm) {
-    options = lowerCaseLetters.concat(specialCharacter);
-  } else if ( !numberConfirm && specialConfirm && upperConfirm && !lowerConfirm) {
-    options = upperCaseLetters.concat(specialCharacter);
-  } else if (numberConfirm && !specialConfirm && !upperConfirm && lowerConfirm) {
-    options = lowerCaseLetters.concat(numbers);
-  } else if (numberConfirm && !specialConfirm && upperConfirm && !lowerConfirm) {
-    options = upperCaseLetters.concat(numbers);
-  } else if (numberConfirm && specialConfirm && !upperConfirm && !lowerConfirm) {
-    options = specialCharacter.concat(numbers);
-
-    //1 criteria is confirmed
-  } else if (numberConfirm && !specialConfirm && !upperConfirm && !lowerConfirm) {
-    options = numbers;
-  } else if (!numberConfirm && specialConfirm && !upperConfirm && !lowerConfirm) {
-    options = specialCharacter;
-  } else if (!numberConfirm && !specialConfirm && upperConfirm && !lowerConfirm) {
-    options = upperCaseLetters;
-  } else if (!numberConfirm && !specialConfirm && !upperConfirm && lowerConfirm) {
-    options = lowerCaseLetters;
+  //if block to show which arrays should be combined (if true concat)
+  if (numberConfirm) {
+    combinedArrays = combinedArrays.concat(numbers);
+  };
+  if (specialConfirm) {
+    combinedArrays = combinedArrays.concat(specialCharacter);
+  };
+  if (upperConfirm) {
+    combinedArrays = combinedArrays.concat(upperCaseLetters);
+  };
+  if (lowerConfirm) {
+    combinedArrays = combinedArrays.concat(lowerCaseLetters);
   };
 
   //randomly assemble password and store as array
-  let password = [];
-  for (i = 0; i < passwordLength; i++) {
-     let pickedOptions = options[Math.floor(Math.random() * options.length)];
-     password.push(pickedOptions);
-  };
-
+    let password = [];
+    for (i = 0; i < passwordLength; i++) {
+      let pickedOptions = combinedArrays[Math.floor(Math.random() * combinedArrays.length)];
+      password.push(pickedOptions);
+    };
+  
   //convert password to string
   password = password.join("");
   console.log(password);
@@ -81,7 +61,7 @@ let generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
-  let password = passwordGenerate();
+  let password = generatePassword();
   let passwordText = document.querySelector("#password");
 
   passwordText.value = password;
